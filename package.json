@@ -1,0 +1,29 @@
+{
+  "name": "teach-blockchain",
+  "version": "1.0.0",
+  "description": "Personalized learning platform for blockchain development through decentralized token trading application",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "test": "cd client && npm test",
+    "install-all": "npm install && cd server && npm install && cd ../client && npm install"
+  },
+  "keywords": [
+    "blockchain",
+    "education",
+    "learning",
+    "solidity",
+    "react",
+    "nodejs",
+    "decentralized",
+    "trading"
+  ],
+  "author": "TeachBlockchain Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
