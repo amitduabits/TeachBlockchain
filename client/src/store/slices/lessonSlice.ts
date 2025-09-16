@@ -105,7 +105,7 @@ export const fetchModules = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await lessonAPI.getModules();
-      return response.modules;
+      return response.data.modules;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch modules');
     }
@@ -117,7 +117,7 @@ export const fetchLesson = createAsyncThunk(
   async ({ moduleId, lessonId }: { moduleId: string; lessonId: string }, { rejectWithValue }) => {
     try {
       const response = await lessonAPI.getLesson(moduleId, lessonId);
-      return response.lesson;
+      return response.data.lesson;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch lesson');
     }
@@ -129,7 +129,7 @@ export const fetchExercise = createAsyncThunk(
   async ({ moduleId, exerciseId }: { moduleId: string; exerciseId: string }, { rejectWithValue }) => {
     try {
       const response = await lessonAPI.getExercise(moduleId, exerciseId);
-      return response.exercise;
+      return response.data.exercise;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch exercise');
     }
@@ -141,7 +141,7 @@ export const runTests = createAsyncThunk(
   async ({ code, tests }: { code: string; tests: TestCase[] }, { rejectWithValue }) => {
     try {
       const response = await lessonAPI.runTests(code, tests);
-      return response.results;
+      return response.data.results;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to run tests');
     }

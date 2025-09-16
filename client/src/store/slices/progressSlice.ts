@@ -1,6 +1,34 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { progressAPI } from '../../services/api';
 
+// API Response interfaces
+interface CompleteLessonResponse {
+  success: boolean;
+  message: string;
+  experienceGained: number;
+  levelUp: boolean;
+  moduleId: string;
+  timeSpent: number;
+}
+
+interface CompleteExerciseResponse {
+  success: boolean;
+  message: string;
+  experienceGained: number;
+  levelUp: boolean;
+  moduleId: string;
+  timeSpent: number;
+}
+
+interface CompleteProjectResponse {
+  success: boolean;
+  message: string;
+  experienceGained: number;
+  levelUp: boolean;
+  moduleId: string;
+  timeSpent: number;
+}
+
 interface Progress {
   userId: string;
   moduleId: string;
@@ -97,7 +125,7 @@ export const fetchUserProgress = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await progressAPI.getUserProgress();
-      return response.progress;
+      return response.data.progress;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch progress');
     }
@@ -109,69 +137,56 @@ export const updateProgress = createAsyncThunk(
   async (progressData: Partial<Progress>, { rejectWithValue }) => {
     try {
       const response = await progressAPI.updateProgress(progressData);
-      return response.progress;
+      return response.data.progress;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to update progress');
     }
   }
 );
 
-export const completeLesson = createAsyncThunk(
+export const completeLesson = createAsyncThunk<CompleteLessonResponse, { moduleId: string; lessonId: string; timeSpent: number }>(
   'progress/completeLesson',
-  async ({ moduleId, lessonId, timeSpent }: { moduleId: string; lessonId: string; timeSpent: number }, { rejectWithValue }) => {
+  async ({ moduleId, lessonId, timeSpent }, { rejectWithValue }) => {
     try {
       const response = await progressAPI.completeLesson(moduleId, lessonId, timeSpent);
-      return response;
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to complete lesson');
     }
   }
 );
 
-export const completeExercise = createAsyncThunk(
+export const completeExercise = createAsyncThunk<CompleteExerciseResponse, { 
+  moduleId: string; 
+  exerciseId: string; 
+  code: string; 
+  testResults: TestResult[]; 
+  timeSpent: number; 
+  attempts: number; 
+}>(
   'progress/completeExercise',
-  async ({ 
-    moduleId, 
-    exerciseId, 
-    code, 
-    testResults, 
-    timeSpent, 
-    attempts 
-  }: { 
-    moduleId: string; 
-    exerciseId: string; 
-    code: string; 
-    testResults: TestResult[]; 
-    timeSpent: number; 
-    attempts: number; 
-  }, { rejectWithValue }) => {
+  async ({ moduleId, exerciseId, code, testResults, timeSpent, attempts }, { rejectWithValue }) => {
     try {
       const response = await progressAPI.completeExercise(moduleId, exerciseId, code, testResults, timeSpent, attempts);
-      return response;
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to complete exercise');
     }
   }
 );
 
-export const completeProject = createAsyncThunk(
+export const completeProject = createAsyncThunk<CompleteProjectResponse, { 
+  moduleId: string; 
+  projectId: string; 
+  code: string; 
+  testResults: TestResult[]; 
+  timeSpent: number; 
+}>(
   'progress/completeProject',
-  async ({ 
-    moduleId, 
-    projectId, 
-    code, 
-    testResults, 
-    timeSpent 
-  }: { 
-    moduleId: string; 
-    projectId: string; 
-    code: string; 
-    testResults: TestResult[]; 
-    timeSpent: number; 
-  }, { rejectWithValue }) => {
+  async ({ moduleId, projectId, code, testResults, timeSpent }, { rejectWithValue }) => {
     try {
       const response = await progressAPI.completeProject(moduleId, projectId, code, testResults, timeSpent);
-      return response;
+      return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to complete project');
     }
@@ -183,7 +198,7 @@ export const fetchLeaderboard = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await progressAPI.getLeaderboard();
-      return response.leaderboard;
+      return response.data.leaderboard;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch leaderboard');
     }

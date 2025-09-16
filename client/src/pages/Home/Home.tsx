@@ -8,6 +8,7 @@ import {
   AcademicCapIcon,
   ChartBarIcon,
   CheckCircleIcon,
+  BookOpenIcon,
   StarIcon
 } from '@heroicons/react/24/outline';
 

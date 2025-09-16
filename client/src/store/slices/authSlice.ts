@@ -33,8 +33,8 @@ export const loginUser = createAsyncThunk(
   async (credentials: { email: string; password: string }, { rejectWithValue }) => {
     try {
       const response = await authAPI.login(credentials);
-      localStorage.setItem('token', response.token);
-      return response.user;
+      localStorage.setItem('token', response.data.token);
+      return response.data.user;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Login failed');
     }
@@ -46,8 +46,8 @@ export const registerUser = createAsyncThunk(
   async (userData: { name: string; email: string; password: string }, { rejectWithValue }) => {
     try {
       const response = await authAPI.register(userData);
-      localStorage.setItem('token', response.token);
-      return response.user;
+      localStorage.setItem('token', response.data.token);
+      return response.data.user;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Registration failed');
     }
@@ -63,7 +63,7 @@ export const loadUser = createAsyncThunk(
         throw new Error('No token found');
       }
       const response = await authAPI.getCurrentUser();
-      return response.user;
+      return response.data.user;
     } catch (error: any) {
       localStorage.removeItem('token');
       return rejectWithValue(error.response?.data?.message || 'Failed to load user');
